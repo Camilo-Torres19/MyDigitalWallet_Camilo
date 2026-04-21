@@ -1,0 +1,110 @@
+/* App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally.
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/* Dark Mode */
+@import "@ionic/angular/css/palettes/dark.system.css";
+
+/* ── Home dark override ───────────────────── */
+ion-content.home-content {
+  --background: #0a0a14 !important;
+  --color: #f0f0f8;
+}
+
+/* Fuerza el fondo oscuro en toda la página home */
+.ion-page:has(ion-content.home-content) {
+  background: #0a0a14;
+}
+
+ion-content.home-content::part(background) {
+  background: #0a0a14;
+}
+
+ion-content.home-content::part(scroll) {
+  background: #0a0a14;
+}
+
+/* Evita que ion-card o ion-list sobreescriban con blanco */
+ion-content.home-content ion-card {
+  --background: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+ion-content.home-content ion-list {
+  --background: transparent;
+  background: transparent;
+}
+
+ion-content.home-content ion-item {
+  --background: transparent;
+}
+/* Fuerza toolbar oscuro solo en home */
+.ion-page:has(ion-content.home-content) ion-header,
+.ion-page:has(ion-content.home-content) ion-toolbar {
+  --background: #0a0a14;
+  --color: #f0f0f8;
+  --border-color: transparent;
+}
+// ── Ionic Item overrides para auth ────────────────
+.custom-input {
+  --inner-padding-end: 0;
+  --inner-padding-start: 0;
+  --inner-border-width: 0;
+  --border-width: 0;
+  --highlight-height: 0;
+
+  // Quita la línea inferior que Ionic agrega por defecto
+  &::part(native) {
+    background: transparent;
+    border-radius: 14px;
+  }
+}
+
+// ── Animaciones globales ───────────────────────────
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes blobPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.1); opacity: 0.65; }
+}
+
+// ── Reset de ion-button ────────────────────────────
+ion-button {
+  --transition: transform 0.15s ease, box-shadow 0.2s ease;
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+// ── Skeleton en tema oscuro ────────────────────────
+ion-skeleton-text {
+  --background: #1a1a2e;
+  --background-rgb: 26, 26, 46;
+}

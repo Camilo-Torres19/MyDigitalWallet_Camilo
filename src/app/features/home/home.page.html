@@ -1,0 +1,171 @@
+<ion-content class="home-content" [scrollEvents]="true">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="greeting">
+      <p class="greeting-sub">MY DIGITAL WALLET</p>
+      <h2 class="greeting-name" *ngIf="userPs$ | async as profile">
+        Hello, {{ profile.name }} 👋
+      </h2>
+    </div>
+    <button class="avatar-btn" (click)="openProfileModal()">
+      <span *ngIf="userPs$ | async as profile">
+        {{ profile.name?.charAt(0) }}{{ profile.lastName?.charAt(0) }}
+      </span>
+    </button>
+  </div>
+
+  <!-- Cards Section -->
+  <p class="section-label">MY CARDS</p>
+  <div class="cards-scroll" #cardsScroll (scroll)="onCardsScroll()">
+    <ng-container *ngFor="let card of cards$ | async; let i = index">
+      <div class="card-item card-anim"
+           [ngClass]="{
+             'visa-card': card.brand === 'Visa',
+             'mc-card': card.brand === 'Mastercard',
+             'unknown-card': card.brand !== 'Visa' && card.brand !== 'Mastercard'
+           }"
+           [style.animation-delay]="i * 80 + 'ms'">
+
+        <div class="card-top">
+          <span class="card-brand">
+            {{ card.brand === 'Visa' ? 'Debit' : 'Credit' }}
+          </span>
+          <span class="card-logo-text">{{ card.brand === 'Mastercard' ? 'MC' : card.brand }}</span>
+        </div>
+
+        <p class="card-num">**** **** **** {{ card.cardNumber.slice(-4) }}</p>
+
+        <div class="card-bottom">
+          <div>
+            <div class="card-holder-label">Cardholder</div>
+            <div class="card-holder-name">{{ card.cardholderName }}</div>
+          </div>
+          <div class="card-exp-block">
+            <div class="card-exp-label">Expires</div>
+            <div class="card-exp">{{ card.expiryDate }}</div>
+          </div>
+        </div>
+
+        <!-- Acciones hover -->
+        <div class="card-actions">
+          <button class="card-action-btn" (click)="updateCard(card)">✎</button>
+          <button class="card-action-btn danger" (click)="deleteCard(card)">✕</button>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Add Card -->
+    <div class="add-card-item" (click)="openAddCardModal()">
+      <div class="add-icon">+</div>
+      <span>ADD CARD</span>
+    </div>
+  </div>
+
+  <!-- Dots -->
+  <div class="scroll-dots" #dotsContainer></div>
+
+  <!-- Quick Actions -->
+  <p class="section-label">QUICK ACTIONS</p>
+  <div class="actions-row">
+    <div class="action-btn" (click)="openCardCarousel()">
+      <div class="action-circle ac-cyan">
+        <ion-icon name="albums-outline"></ion-icon>
+      </div>
+      <span class="action-label">Change</span>
+    </div>
+    <div class="action-btn" (click)="openPaymentModal()">
+      <div class="action-circle ac-green">
+        <ion-icon name="card-outline"></ion-icon>
+      </div>
+      <span class="action-label">Pay Now</span>
+    </div>
+    <div class="action-btn" (click)="openAddCardModal()">
+      <div class="action-circle ac-navy">
+        <ion-icon name="add-outline"></ion-icon>
+      </div>
+      <span class="action-label">Add Card</span>
+    </div>
+  </div>
+
+  <!-- History -->
+  <div class="history-panel">
+    <div class="history-header">
+      <h3>Card History</h3>
+      <a (click)="openTotalExpenses()">View All →</a>
+    </div>
+
+    <ng-container *ngIf="(defaultCardTransactions$ | async) as txs; else noTx">
+      <div class="tx-item tx-anim" *ngFor="let tx of txs; let i = index"
+           [style.animation-delay]="i * 60 + 'ms'">
+        <div class="tx-icon">
+          <ion-icon name="receipt-outline"></ion-icon>
+        </div>
+        <div class="tx-info">
+          <div class="tx-merchant">{{ tx.merchant }}</div>
+          <div class="tx-date">{{ tx.date | date:'short' }}</div>
+        </div>
+        <div class="tx-amount">{{ tx.amount | currency:'COP':'symbol':'1.0-0' }}</div>
+      </div>
+    </ng-container>
+
+    <ng-template #noTx>
+      <div class="tx-empty">
+        <ion-icon name="receipt-outline"></ion-icon>
+        <p>No transactions yet</p>
+      </div>
+    </ng-template>
+  </div>
+
+</ion-content>
+
+<!-- Modal Perfil -->
+<ion-modal [isOpen]="isProfileModalOpen" (didDismiss)="closeProfileModal()"
+           [breakpoints]="[0.3, 0.7, 1]" [initialBreakpoint]="0.7">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>My Profile</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeProfileModal()">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div class="profile-modal">
+        <div class="profile-avatar-circle">
+          {{ editableProfile.name?.charAt(0) }}{{ editableProfile.lastName?.charAt(0) }}
+        </div>
+        <h2>{{ editableProfile.name }} {{ editableProfile.lastName }}</h2>
+        <p>{{ editableProfile.email }}</p>
+
+        <ion-item class="modal-input">
+          <ion-icon slot="start" name="person-outline"></ion-icon>
+          <ion-label position="stacked">First Name</ion-label>
+          <ion-input [(ngModel)]="editableProfile.name"></ion-input>
+        </ion-item>
+        <ion-item class="modal-input">
+          <ion-icon slot="start" name="person-outline"></ion-icon>
+          <ion-label position="stacked">Last Name</ion-label>
+          <ion-input [(ngModel)]="editableProfile.lastName"></ion-input>
+        </ion-item>
+        <ion-item class="modal-input">
+          <ion-icon slot="start" name="finger-print-outline"></ion-icon>
+          <ion-label>Biometrics</ion-label>
+          <ion-toggle [(ngModel)]="editableProfile.biometrics" (ionChange)="toggleBiometric()"></ion-toggle>
+        </ion-item>
+
+        <ion-button expand="block" class="save-btn" (click)="saveProfile()">
+          <ion-icon slot="start" name="save-outline"></ion-icon>
+          Save Changes
+        </ion-button>
+        <ion-button expand="block" fill="outline" color="danger" shape="round" (click)="auth.logout(); closeProfileModal()">
+          <ion-icon slot="start" name="log-out-outline"></ion-icon>
+          Logout
+        </ion-button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

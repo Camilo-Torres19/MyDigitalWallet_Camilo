@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "539926553036",
+    "project_id": "mydigitalwallet-camilo",
+    "storage_bucket": "mydigitalwallet-camilo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539926553036:android:0d00f1670db546fc44bd69",
+        "android_client_info": {
+          "package_name": "com.camilo.mydigitalwallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539926553036-4m9pbfg03rlnb20o2hes53riqar9i9jj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.camilo.mydigitalwallet",
+            "certificate_hash": "5454a3dece376c66a185fa2ea94eb5db2f7bb304"
+          }
+        },
+        {
+          "client_id": "539926553036-78lha7ur6odhnb5f8c94evnid1bcprgc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBckY_OrwRKK7xEnZX6QmiQW4QSUG8tXG0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539926553036-78lha7ur6odhnb5f8c94evnid1bcprgc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

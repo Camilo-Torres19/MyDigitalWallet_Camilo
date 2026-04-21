@@ -1,0 +1,106 @@
+<ion-header>
+  <ion-toolbar class="dark-toolbar">
+    <ion-title>Total Expenses</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()" class="close-btn">CLOSE</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="exp-container">
+
+    <!-- Card selector -->
+    <div class="card-selector">
+      <div class="cs-left">
+        <div class="cs-chip" [ngClass]="getCardClass(selectedCard?.brand)">
+          <ng-container [ngSwitch]="selectedCard?.brand">
+            <span *ngSwitchCase="'Visa'" class="logo-visa">VISA</span>
+            <div *ngSwitchCase="'Mastercard'" class="logo-mc">
+              <div class="mc-c1"></div><div class="mc-c2"></div>
+            </div>
+            <ion-icon *ngSwitchDefault name="card-outline"
+              style="font-size:14px;color:rgba(255,255,255,0.5)">
+            </ion-icon>
+          </ng-container>
+        </div>
+        <div>
+          <div class="cs-name">{{ selectedCard?.cardholderName }}</div>
+          <div class="cs-num">•••• {{ selectedCard?.cardNumber?.slice(-4) }}</div>
+        </div>
+      </div>
+      <button class="cs-change" (click)="openChangeCard()">Change ▾</button>
+    </div>
+
+    <!-- Total spend -->
+    <div class="spend-block">
+      <div class="spend-lbl">Total Spend (By Card)</div>
+      <div class="spend-amt">
+        {{ totalSpend | currency:'COP':'symbol':'1.0-0' }}
+        <span>COP</span>
+      </div>
+      <div class="bar-bg">
+        <div class="bar-fill" [style.width.%]="spendPercent"></div>
+      </div>
+      <div class="bar-meta">
+        <span class="bar-pct">{{ spendPercent | number:'1.0-0' }}% del límite</span>
+        <span class="bar-limit">Límite: {{ monthlyLimit | currency:'COP':'symbol':'1.0-0' }}</span>
+      </div>
+    </div>
+
+    <!-- Calendar -->
+    <div class="cal-block">
+      <div class="cal-header">
+        <span class="cal-month">{{ currentMonthLabel }}</span>
+        <div class="cal-navs">
+          <button class="cal-nav" (click)="prevMonth()">‹</button>
+          <button class="cal-nav" (click)="nextMonth()">›</button>
+        </div>
+      </div>
+      <div class="weekdays-row">
+        <span *ngFor="let d of weekDays" class="wd">{{ d }}</span>
+      </div>
+      <div class="days-grid">
+        <div *ngFor="let day of calendarDays"
+             class="day-cell"
+             [class.selected]="isSelectedDay(day)"
+             [class.today]="isToday(day)"
+             [class.empty]="!day"
+             [class.has-tx]="dayHasTransaction(day)"
+             (click)="selectDay(day)">
+          <span *ngIf="day">{{ day }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transactions -->
+    <div class="tx-header">
+      <span class="tx-title">Transacciones</span>
+      <span class="tx-date">{{ selectedDayLabel }}</span>
+    </div>
+
+    <div *ngIf="transactions.length === 0" class="no-tx">
+      <ion-icon name="receipt-outline" style="font-size:32px;margin-bottom:8px"></ion-icon>
+      <p>No hay transacciones este día</p>
+    </div>
+
+    <div *ngFor="let tx of transactions" class="tx-item">
+      <div class="tx-icon-wrap" [ngClass]="getTxIconClass(tx)">
+        <ion-icon [name]="getTxIcon(tx)"></ion-icon>
+      </div>
+      <div class="tx-info">
+        <span class="tx-merchant">{{ tx.merchant }}</span>
+        <span class="tx-time">{{ tx.date | date:'shortTime' }}</span>
+      </div>
+      <div class="tx-right">
+        <span class="tx-amount" [class.declined]="tx.status === 'declined'">
+          {{ tx.amount | currency:'COP':'symbol':'1.0-0' }}
+        </span>
+        <span class="tx-status" [class.dec]="tx.status === 'declined'">
+          {{ tx.status === 'declined' ? 'Declinado' : 'Aprobado' }}
+        </span>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

@@ -1,0 +1,78 @@
+<ion-header class="dark-header" [translucent]="false">
+  <ion-toolbar>
+    <ion-title>Select Card</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="carousel-content">
+  <div class="carousel-container">
+
+    <p class="section-label">MY CARDS</p>
+
+    <swiper-container #swiperRef init="false">
+      <swiper-slide *ngFor="let card of cards; let i = index">
+        <div class="card-preview"
+             [ngClass]="{
+               'visa-card': detectBrand(card.cardNumber) === 'Visa',
+               'mc-card': detectBrand(card.cardNumber) === 'Mastercard',
+               'unknown-card': detectBrand(card.cardNumber) !== 'Visa' && detectBrand(card.cardNumber) !== 'Mastercard'
+             }">
+
+          <div class="card-top">
+            <span class="card-brand">
+              {{ detectBrand(card.cardNumber) === 'Visa' ? 'Debit' : 'Credit' }}
+            </span>
+            <span class="card-logo-text">
+              {{ detectBrand(card.cardNumber) === 'Mastercard' ? 'MC' : detectBrand(card.cardNumber) }}
+            </span>
+          </div>
+
+          <p class="card-num">**** **** **** {{ card.cardNumber.slice(-4) }}</p>
+
+          <div class="card-bottom">
+            <div>
+              <div class="card-holder-label">Cardholder</div>
+              <div class="card-holder-name">{{ card.cardholderName || 'YOUR NAME' }}</div>
+            </div>
+            <div class="card-exp-block">
+              <div class="card-exp-label">Expires</div>
+              <div class="card-exp">{{ card.expiryDate || 'MM/YY' }}</div>
+            </div>
+          </div>
+
+        </div>
+      </swiper-slide>
+    </swiper-container>
+
+    <!-- Info de la tarjeta actual -->
+    <div class="card-info" *ngIf="cards[currentIndex] as card">
+      <p class="card-info-name">{{ card.cardholderName }}</p>
+      <p class="card-info-sub">
+        {{ detectBrand(card.cardNumber) }} • {{ card.cardNumber.slice(-4) }}
+      </p>
+    </div>
+
+    <!-- Dots indicadores -->
+    <div class="carousel-dots">
+      <span class="dot" *ngFor="let card of cards; let i = index"
+            [class.active]="i === activeIndex"></span>
+    </div>
+
+  </div>
+</ion-content>
+
+<ion-footer class="dark-footer">
+  <ion-toolbar>
+    <div class="bottom-action">
+      <ion-button expand="block" class="set-default-btn" (click)="confirmSetDefault()">
+        <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+        Set as Default
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

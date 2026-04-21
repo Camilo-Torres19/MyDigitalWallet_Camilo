@@ -1,0 +1,315 @@
+// ── Content ────────────────────────────────
+ion-content.payment-content {
+  --background: #0a0a14;
+}
+
+.payment-container {
+  padding: 20px 20px 32px;
+  background: #0a0a14;
+  min-height: 100%;
+}
+
+// ── Section Labels ─────────────────────────
+.section-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: #7070a0;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+
+// ── Active Card Info ───────────────────────
+// ── Active Card Full ───────────────────────────────
+.active-card-full {
+  width: 100%;
+  border-radius: 20px;
+  padding: 18px 20px 16px;
+  position: relative;
+  overflow: hidden;
+  min-height: 168px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  &:active { transform: scale(0.97); }
+
+  // Gradientes por franquicia
+  &.acf-visa    { background: linear-gradient(135deg, #1a1f71 0%, #1e40af 60%, #2563eb 100%); }
+  &.acf-mc      { background: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 55%, #f59e0b 100%); }
+  &.acf-amex    { background: linear-gradient(135deg, #064e3b 0%, #047857 60%, #10b981 100%); }
+  &.acf-unknown { background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%); }
+}
+
+.acf-blob1, .acf-blob2 {
+  position: absolute; border-radius: 50%;
+  background: rgba(255,255,255,0.07); pointer-events: none;
+}
+.acf-blob1 { width: 220px; height: 220px; top: -80px; right: -60px; }
+.acf-blob2 { width: 150px; height: 150px; bottom: -50px; left: -30px; background: rgba(255,255,255,0.05); }
+
+.acf-top {
+  display: flex; justify-content: space-between; align-items: center;
+  position: relative; z-index: 1;
+
+  .acf-bank {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(255,255,255,0.55);
+  }
+
+  .acf-badge {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    color: #0a0a14; background: #a8e63d;
+    padding: 3px 10px; border-radius: 20px; text-transform: uppercase;
+  }
+}
+
+.acf-mid {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 10px; position: relative; z-index: 1;
+}
+
+.acf-chip {
+  width: 36px; height: 27px; border-radius: 6px;
+  background: linear-gradient(135deg, #d4a843 0%, #f0c96a 50%, #c49030 100%);
+  position: relative; overflow: hidden;
+
+  &::after {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      90deg, transparent, transparent 10px,
+      rgba(0,0,0,0.12) 10px, rgba(0,0,0,0.12) 11px
+    );
+  }
+}
+
+.acf-logo {
+  display: flex; align-items: center;
+
+  .logo-visa {
+    font-size: 20px; font-weight: 900; font-style: italic;
+    color: #fff; letter-spacing: -1px; font-family: serif;
+  }
+
+  .logo-mc { display: flex; align-items: center; }
+  .mc-c1 { width: 22px; height: 22px; border-radius: 50%; background: #e53e3e; }
+  .mc-c2 { width: 22px; height: 22px; border-radius: 50%; background: #f59e0b; margin-left: -10px; }
+
+  .logo-amex {
+    font-size: 13px; font-weight: 900; color: #fff;
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+
+  .logo-generic ion-icon { font-size: 22px; color: rgba(255,255,255,0.7); }
+}
+
+.acf-number {
+  font-family: 'Courier New', monospace;
+  font-size: 15px; letter-spacing: 0.18em;
+  color: rgba(255,255,255,0.9); font-weight: 600;
+  text-align: center; margin: 10px 0 6px;
+  position: relative; z-index: 1;
+}
+
+.acf-bottom {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  position: relative; z-index: 1;
+}
+
+.acf-meta {
+  display: flex; flex-direction: column;
+
+  &.acf-meta-right { text-align: right; }
+
+  .acf-meta-label {
+    font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4); margin-bottom: 2px;
+  }
+
+  .acf-meta-value {
+    font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.92);
+  }
+
+  .acf-meta-mono {
+    font-family: 'Courier New', monospace;
+    font-size: 12px; color: rgba(255,255,255,0.75);
+  }
+}
+
+// ── Merchants Grid ─────────────────────────
+.merchants-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.merchant-card {
+  background: #12121f;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 14px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.selected {
+    border-color: #a8e63d;
+    background: rgba(168, 230, 61, 0.06);
+
+    .merchant-amount { color: #a8e63d; }
+  }
+
+  &:active { transform: scale(0.97); }
+
+  .merchant-icon { font-size: 28px; margin-bottom: 6px; }
+
+  .merchant-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: #f0f0f8;
+    margin: 0 0 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .merchant-category {
+    font-size: 10px;
+    color: #7070a0;
+    margin: 0 0 4px;
+  }
+
+  .merchant-amount {
+    font-size: 13px;
+    color: #06b6d4;
+    font-weight: 700;
+    margin: 0;
+    transition: color 0.2s;
+  }
+}
+
+// ── Shuffle Button ─────────────────────────
+.shuffle-btn {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  color: #7070a0;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 4px;
+
+  ion-icon { font-size: 16px; }
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.16);
+    color: #f0f0f8;
+  }
+
+  &:active { transform: scale(0.98); }
+}
+
+// ── Custom Amount Input ────────────────────
+.custom-input {
+  --background: #1a1a2e;
+  --border-radius: 12px;
+  --border-width: 0;
+  --highlight-color-focused: transparent;
+  --padding-start: 16px;
+  --color: #f0f0f8;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 4px;
+
+  ion-label {
+    font-size: 10px !important;
+    font-weight: 600;
+    color: #7070a0 !important;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  ion-input {
+    --color: #f0f0f8;
+    --placeholder-color: #7070a0;
+    font-size: 15px;
+  }
+}
+
+// ── Summary Panel ──────────────────────────
+.summary-panel {
+  background: #12121f;
+  border-radius: 16px;
+  border: 0.5px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.05);
+
+  &:last-child { border-bottom: none; }
+
+  &.total-row {
+    background: rgba(168, 230, 61, 0.04);
+    padding: 14px 16px;
+  }
+}
+
+.summary-label {
+  font-size: 13px;
+  color: #7070a0;
+}
+
+.summary-value {
+  font-size: 13px;
+  color: #f0f0f8;
+  font-weight: 500;
+}
+
+.summary-total {
+  font-size: 15px;
+  font-weight: 700;
+  color: #a8e63d;
+}
+
+// ── Footer ─────────────────────────────────
+.dark-footer ion-toolbar {
+  --background: #0a0a14;
+  --border-color: rgba(255, 255, 255, 0.06);
+}
+
+.pay-btn-wrapper {
+  padding: 8px 20px 16px;
+
+  .pay-btn {
+    --background: #a8e63d;
+    --color: #0a0a14;
+    --border-radius: 14px;
+    --box-shadow: none;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    height: 52px;
+
+    &[disabled] {
+      --background: #1a1a2e;
+      --color: #7070a0;
+      opacity: 1;
+    }
+  }
+}

@@ -1,0 +1,138 @@
+ion-content { --background: #0a0a14; }
+
+ion-toolbar.dark-toolbar {
+  --background: #0a0a14;
+  --border-color: rgba(255,255,255,0.06);
+  --color: #f0f0f8;
+  ion-title { font-weight: 700; color: #f0f0f8; }
+  .close-btn { --color: #7070a0; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; }
+}
+
+.exp-container {
+  padding: 16px;
+  background: #0a0a14;
+  min-height: 100%;
+}
+
+// ── Card selector ──────────────────────────
+.card-selector {
+  background: #12121f;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 13px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.cs-left { display: flex; align-items: center; gap: 12px; }
+.cs-chip {
+  width: 42px; height: 28px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  &.acf-visa    { background: linear-gradient(135deg, #1a1f71, #2563eb); }
+  &.acf-mc      { background: linear-gradient(135deg, #7f1d1d, #b91c1c 55%, #f59e0b); }
+  &.acf-unknown { background: #1a1a2e; border: 1px solid rgba(255,255,255,0.1); }
+  .logo-visa { font-size: 11px; font-weight: 900; font-style: italic; color: #fff; font-family: serif; }
+  .logo-mc { display: flex; }
+  .mc-c1 { width: 14px; height: 14px; border-radius: 50%; background: #e53e3e; }
+  .mc-c2 { width: 14px; height: 14px; border-radius: 50%; background: #f59e0b; margin-left: -6px; }
+}
+.cs-name { font-size: 13px; font-weight: 600; color: #f0f0f8; }
+.cs-num  { font-size: 11px; color: #7070a0; font-family: 'Courier New', monospace; letter-spacing: 0.06em; }
+.cs-change {
+  font-size: 11px; font-weight: 700; color: #a8e63d;
+  background: none; border: none; cursor: pointer; letter-spacing: 0.06em;
+}
+
+// ── Spend block ────────────────────────────
+.spend-block {
+  background: #12121f;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 18px 16px 14px;
+  margin-bottom: 14px;
+}
+.spend-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #7070a0; margin-bottom: 6px; }
+.spend-amt {
+  font-size: 28px; font-weight: 700; color: #f0f0f8; margin-bottom: 14px; letter-spacing: -0.5px;
+  span { font-size: 14px; color: #7070a0; font-weight: 500; margin-left: 4px; }
+}
+.bar-bg { height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; margin-bottom: 8px; overflow: hidden; }
+.bar-fill { height: 100%; background: linear-gradient(90deg, #a8e63d, #6bcf3d); border-radius: 3px; transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+.bar-meta { display: flex; justify-content: space-between; }
+.bar-pct   { font-size: 11px; font-weight: 700; color: #a8e63d; }
+.bar-limit { font-size: 11px; color: #7070a0; }
+
+// ── Calendar ───────────────────────────────
+.cal-block {
+  background: #12121f;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 14px 12px;
+  margin-bottom: 16px;
+}
+.cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.cal-month  { font-size: 14px; font-weight: 700; color: #f0f0f8; }
+.cal-navs   { display: flex; gap: 4px; }
+.cal-nav {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: rgba(255,255,255,0.05); border: none;
+  color: #7070a0; font-size: 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  &:hover { background: rgba(255,255,255,0.09); color: #f0f0f8; }
+}
+.weekdays-row { display: grid; grid-template-columns: repeat(7,1fr); margin-bottom: 4px; }
+.wd { text-align: center; font-size: 9px; font-weight: 700; letter-spacing: 0.08em; color: #7070a0; text-transform: uppercase; padding: 4px 0; }
+.days-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; }
+.day-cell {
+  height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: #7070a0; cursor: pointer; transition: all 0.15s; position: relative;
+  &:hover:not(.empty) { background: rgba(255,255,255,0.05); color: #f0f0f8; }
+  &.today { color: #f0f0f8; font-weight: 700; background: rgba(255,255,255,0.07); }
+  &.selected { background: #a8e63d; color: #0a0a14; font-weight: 700; border-radius: 10px; }
+  &.empty { pointer-events: none; }
+  &.has-tx::after {
+    content: ''; width: 4px; height: 4px; border-radius: 50%;
+    background: #a8e63d; position: absolute; bottom: 3px;
+    left: 50%; transform: translateX(-50%);
+  }
+  &.selected::after { display: none; }
+}
+
+// ── Transactions ───────────────────────────
+.tx-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.tx-title { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #7070a0; }
+.tx-date  { font-size: 11px; color: #a8e63d; font-weight: 600; }
+
+.tx-item {
+  background: #12121f;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  transition: border-color 0.2s;
+  &:active { transform: scale(0.98); }
+}
+.tx-icon-wrap {
+  width: 38px; height: 38px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  ion-icon { font-size: 17px; }
+  &.food { background: rgba(251,146,60,0.15); ion-icon { color: #fb923c; } }
+  &.shop { background: rgba(168,230,61,0.12); ion-icon { color: #a8e63d; } }
+  &.tech { background: rgba(59,130,246,0.15); ion-icon { color: #3b82f6; } }
+  &.other{ background: rgba(112,112,160,0.15); ion-icon { color: #7070a0; } }
+}
+.tx-info { flex: 1; }
+.tx-merchant { font-size: 13px; font-weight: 600; color: #f0f0f8; display: block; margin-bottom: 2px; }
+.tx-time     { font-size: 11px; color: #7070a0; }
+.tx-right    { text-align: right; }
+.tx-amount   { font-size: 14px; font-weight: 700; color: #f0f0f8; display: block;
+  &.declined { color: #ef4444; text-decoration: line-through; } }
+.tx-status   { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: #a8e63d;
+  &.dec { color: #ef4444; } }
+
+.no-tx { text-align: center; padding: 32px; color: #7070a0; font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 4px; }

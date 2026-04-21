@@ -1,0 +1,228 @@
+// Fuerza el fondo oscuro
+ion-content { --background: #0a0a14; }
+
+ion-header.dark-header ion-toolbar,
+ion-toolbar {
+  --background: #0a0a14;
+  --border-color: rgba(255,255,255,0.06);
+  --color: #f0f0f8;
+  ion-title { color: #f0f0f8; font-weight: 700; }
+  ion-button { --color: #f0f0f8; }
+}
+
+.auth-container {
+  min-height: 100vh;
+  background: #0a0a14;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-blob {
+  position: absolute;
+  top: -60px; left: -40px;
+  width: 300px; height: 240px;
+  background: radial-gradient(ellipse, rgba(168,230,61,0.10) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+// ── Tarjeta live preview ──────────────────
+.card-live-preview {
+  margin: 20px 20px 0;
+  border-radius: 20px;
+  padding: 18px 20px 16px;
+  position: relative;
+  overflow: hidden;
+  min-height: 168px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: background 0.4s ease, box-shadow 0.3s ease;
+
+  &.acf-visa {
+    background: linear-gradient(135deg, #1a1f71 0%, #1e40af 60%, #2563eb 100%);
+    box-shadow: 0 12px 32px rgba(37,99,235,0.35);
+  }
+  &.acf-mc {
+    background: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 55%, #f59e0b 100%);
+    box-shadow: 0 12px 32px rgba(185,28,28,0.35);
+  }
+  &.acf-amex {
+    background: linear-gradient(135deg, #064e3b 0%, #047857 60%, #10b981 100%);
+    box-shadow: 0 12px 32px rgba(4,120,87,0.35);
+  }
+  &.acf-unknown {
+    background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+  }
+}
+
+.acf-blob1, .acf-blob2 {
+  position: absolute; border-radius: 50%; pointer-events: none;
+}
+.acf-blob1 { width: 220px; height: 220px; top: -80px; right: -60px; background: rgba(255,255,255,0.08); }
+.acf-blob2 { width: 150px; height: 150px; bottom: -50px; left: -30px; background: rgba(255,255,255,0.05); }
+
+.acf-top {
+  display: flex; justify-content: space-between; align-items: center;
+  position: relative; z-index: 1;
+}
+.acf-bank {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(255,255,255,0.55);
+}
+.acf-logo {
+  display: flex; align-items: center;
+  .logo-visa { font-size: 20px; font-weight: 900; font-style: italic; color: #fff; letter-spacing: -1px; font-family: 'Times New Roman', serif; }
+  .logo-mc { display: flex; align-items: center; }
+  .mc-c1 { width: 22px; height: 22px; border-radius: 50%; background: #e53e3e; opacity: 0.9; }
+  .mc-c2 { width: 22px; height: 22px; border-radius: 50%; background: #f59e0b; opacity: 0.9; margin-left: -10px; }
+  .logo-amex { font-size: 13px; font-weight: 900; color: #fff; letter-spacing: 0.12em; text-transform: uppercase; }
+}
+
+.acf-mid {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 10px; position: relative; z-index: 1;
+}
+.acf-chip {
+  width: 36px; height: 27px; border-radius: 6px;
+  background: linear-gradient(135deg, #d4a843 0%, #f0c96a 50%, #c49030 100%);
+  position: relative; overflow: hidden;
+  &::after {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(0,0,0,0.12) 10px, rgba(0,0,0,0.12) 11px);
+  }
+}
+
+.acf-number {
+  font-family: 'Courier New', monospace;
+  font-size: 15px; letter-spacing: 0.18em;
+  color: rgba(255,255,255,0.9); font-weight: 600;
+  text-align: center; margin: 10px 0 6px;
+  position: relative; z-index: 1;
+}
+.acf-bottom {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  position: relative; z-index: 1;
+}
+.acf-meta {
+  display: flex; flex-direction: column; gap: 2px;
+  .acf-meta-label { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+  .acf-meta-value { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.92); }
+  .acf-meta-mono { font-family: 'Courier New', monospace; font-size: 12px; color: rgba(255,255,255,0.75); }
+}
+
+// ── Form ──────────────────────────────────
+.auth-form {
+  padding: 20px 20px 40px;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.field-wrapper {
+  margin-bottom: 12px;
+}
+
+.field-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #7070a0;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.field-box {
+  background: #12121f;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 13px;
+  padding: 13px 14px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  transition: border-color 0.2s, background 0.2s;
+
+  &:focus-within {
+    border-color: rgba(168,230,61,0.45);
+    background: #14142a;
+  }
+
+  input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #f0f0f8;
+    font-size: 14px;
+    flex: 1;
+    width: 100%;
+    font-family: inherit;
+
+    &::placeholder { color: #7070a0; }
+  }
+}
+
+.field-hint {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a8e63d;
+  display: block;
+  margin-top: 5px;
+  padding-left: 4px;
+}
+
+// ── Botones ────────────────────────────────
+.btn-login {
+  width: 100%;
+  background: #a8e63d;
+  border: none;
+  border-radius: 14px;
+  padding: 15px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #0a0a14;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(168,230,61,0.25);
+  transition: transform 0.15s, box-shadow 0.2s;
+
+  &:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(168,230,61,0.4); }
+  &:active { transform: scale(0.97); }
+}
+
+.btn-delete {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 14px;
+  padding: 13px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ef4444;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+  transition: background 0.2s, border-color 0.2s;
+  letter-spacing: 0.04em;
+
+  &:hover { background: rgba(239,68,68,0.06); border-color: rgba(239,68,68,0.4); }
+  &:active { transform: scale(0.97); }
+}
+
+// ── Animaciones ────────────────────────────
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

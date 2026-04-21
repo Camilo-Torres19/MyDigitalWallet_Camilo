@@ -1,0 +1,135 @@
+<ion-header class="dark-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()" fill="clear">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" slot="icon-only">
+          <path d="M19 12H5M5 12l7-7M5 12l7 7" stroke="#f0f0f8" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Editar Tarjeta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="auth-container">
+    <div class="header-blob"></div>
+
+    <!-- Tarjeta visual en tiempo real -->
+    <div class="card-live-preview" [ngClass]="getCardClass(card.cardNumber)">
+      <div class="acf-blob1"></div>
+      <div class="acf-blob2"></div>
+
+      <div class="acf-top">
+        <span class="acf-bank">{{ detectBrand(card.cardNumber) || 'Mi Tarjeta' }}</span>
+        <div class="acf-logo">
+          <ng-container [ngSwitch]="getBrandKey(card.cardNumber)">
+            <span *ngSwitchCase="'visa'" class="logo-visa">VISA</span>
+            <div *ngSwitchCase="'mastercard'" class="logo-mc">
+              <div class="mc-c1"></div><div class="mc-c2"></div>
+            </div>
+            <span *ngSwitchCase="'amex'" class="logo-amex">AMEX</span>
+            <ion-icon *ngSwitchDefault name="card-outline"
+              style="font-size:22px;color:rgba(255,255,255,0.5)">
+            </ion-icon>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="acf-mid">
+        <div class="acf-chip"></div>
+      </div>
+
+      <div class="acf-number">
+        {{ formatCardNumber(card.cardNumber) || '•••• •••• •••• ••••' }}
+      </div>
+
+      <div class="acf-bottom">
+        <div class="acf-meta">
+          <span class="acf-meta-label">Card Holder</span>
+          <span class="acf-meta-value">
+            {{ card.cardholderName || 'YOUR NAME' }}
+          </span>
+        </div>
+        <div class="acf-meta" style="text-align:right">
+          <span class="acf-meta-label">Expires</span>
+          <span class="acf-meta-mono">{{ card.expiryDate || '••/••' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <div class="auth-form">
+
+      <div class="field-wrapper">
+        <label class="field-label">Nombre del Titular</label>
+        <div class="field-box">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="8" r="4" stroke="#a8e63d" stroke-width="1.5"/>
+            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#a8e63d" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <input type="text" [(ngModel)]="card.cardholderName"
+            placeholder="JUAN PÉREZ"
+            style="text-transform:uppercase"/>
+        </div>
+      </div>
+
+      <div class="field-wrapper">
+        <label class="field-label">Número de Tarjeta</label>
+        <div class="field-box">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+            <rect x="2" y="5" width="20" height="14" rx="2" stroke="#a8e63d" stroke-width="1.5"/>
+            <path d="M2 10h20" stroke="#a8e63d" stroke-width="1.5"/>
+            <path d="M6 15h4" stroke="#a8e63d" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <input type="tel" [(ngModel)]="card.cardNumber"
+            (input)="onCardNumberInput($event)"
+            placeholder="0000 0000 0000 0000"
+            maxlength="19"
+            inputmode="numeric"
+            style="font-family:'Courier New',monospace;letter-spacing:0.1em"/>
+        </div>
+        <span class="field-hint" *ngIf="detectBrand(card.cardNumber)">
+          {{ detectBrand(card.cardNumber) }} detectada
+        </span>
+      </div>
+
+      <div class="field-row">
+        <div class="field-wrapper">
+          <label class="field-label">Expiración</label>
+          <div class="field-box">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="4" width="18" height="17" rx="2" stroke="#a8e63d" stroke-width="1.5"/>
+              <path d="M3 9h18M8 2v4M16 2v4" stroke="#a8e63d" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <input type="tel" [(ngModel)]="card.expiryDate"
+              (input)="onExpiryInput($event)"
+              placeholder="MM/YY"
+              maxlength="5"
+              inputmode="numeric"
+              style="font-family:'Courier New',monospace;letter-spacing:0.1em"/>
+          </div>
+        </div>
+
+        <div class="field-wrapper">
+          <label class="field-label">CVV</label>
+          <div class="field-box">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="7" width="18" height="13" rx="2" stroke="#a8e63d" stroke-width="1.5"/>
+              <path d="M7 7V5a5 5 0 0110 0v2" stroke="#a8e63d" stroke-width="1.5"/>
+            </svg>
+            <input type="tel" [(ngModel)]="card.cvv"
+              placeholder="•••"
+              maxlength="4"
+              inputmode="numeric"/>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-login" (click)="save()" style="margin-top:8px">
+        GUARDAR TARJETA
+      </button>
+
+    </div>
+  </div>
+</ion-content>

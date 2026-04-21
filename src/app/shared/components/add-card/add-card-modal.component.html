@@ -1,0 +1,82 @@
+<ion-content class="auth-content">
+  <div style="display:flex;flex-direction:column;min-height:100%">
+
+    <!-- Header personalizado -->
+    <div class="page-header">
+      <ion-button fill="clear" class="back-btn" (click)="cancel()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+      <div class="header-text">
+        <h2>Add New Card</h2>
+        <p>Securely link your payment method</p>
+      </div>
+    </div>
+
+    <!-- Tarjeta visual -->
+    <div class="card-preview" [ngClass]="{
+      'visa-card': detectBrand(cardNumber) === 'Visa',
+      'mastercard-card': detectBrand(cardNumber) === 'Mastercard',
+      'unknown-card': detectBrand(cardNumber) !== 'Visa' && detectBrand(cardNumber) !== 'Mastercard'
+    }">
+      <div class="card-top">
+        <span>DEBIT</span>
+        <img *ngIf="detectBrand(cardNumber) === 'Visa'" src="assets/icon/visa.png" class="card-logo">
+        <img *ngIf="detectBrand(cardNumber) === 'Mastercard'" src="assets/icon/mastercard.png" class="card-logo">
+        <img *ngIf="detectBrand(cardNumber) !== 'Visa' && detectBrand(cardNumber) !== 'Mastercard'" src="assets/icon/unknown.svg" class="card-logo">
+      </div>
+      <div>
+        <p class="card-name-label">{{ cardholderName || 'YOUR NAME' }}</p>
+        <p class="card-number">{{ formatCardNumber(cardNumber) || 'XXXX XXXX XXXX XXXX' }}</p>
+      </div>
+      <div class="card-bottom">
+        <span class="card-expiry">{{ expiryDate || 'MM/YY' }}</span>
+      </div>
+    </div>
+
+    <!-- Formulario (panel blanco) -->
+    <div class="form-panel">
+
+      <ion-item class="custom-input">
+        <ion-label position="stacked">Cardholder Name</ion-label>
+        <ion-input type="text" inputmode="text" [(ngModel)]="cardholderName"
+          maxlength="25" (ionInput)="onNameInput($event)"
+          placeholder="James Smith">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="custom-input">
+        <ion-label position="stacked">Card Number</ion-label>
+        <ion-input [(ngModel)]="cardNumber" maxlength="19"
+          type="tel" (ionInput)="onCardNumberInput($event)"
+          placeholder="XXXX XXXX XXXX XXXX">
+        </ion-input>
+      </ion-item>
+
+      <!-- Fila Expiry + CVC -->
+      <div class="expiry-cvc-row">
+        <ion-item class="custom-input">
+          <ion-label position="stacked">Expiry Date</ion-label>
+          <ion-input [(ngModel)]="expiryDate" maxlength="5"
+            (ionInput)="onExpiryInput($event)" placeholder="MM/YY">
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="custom-input">
+          <ion-label position="stacked">CVC</ion-label>
+          <ion-input 
+            [(ngModel)]="cvc" 
+            type="password" 
+            maxlength="3"
+            (ionInput)="onCvcInput($event)"
+            placeholder="•••">
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <ion-button expand="block" class="add-card-btn" (click)="addCard()">
+        ADD NEW CARD
+      </ion-button>
+
+    </div>
+  </div>
+</ion-content>
