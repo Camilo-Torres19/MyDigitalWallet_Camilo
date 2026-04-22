@@ -58,6 +58,14 @@ export class HomePage {
 
   ionViewDidEnter() {
     this.buildDots();
+    this.initNotifications();
+  }
+
+  private async initNotifications() {
+    const user = this.auth.getCurrentUser();
+    if (user?.uid) {
+      await this.notificationService.init(user.uid);
+    }
   }
 
   private async loadTransactions() {
@@ -264,6 +272,8 @@ export class HomePage {
 
     const { data, role } = await modal.onWillDismiss();
     if (role === 'confirm' && data) {
+      // Invalidar caché para reflejar el nuevo pago
+      this.paymentService.invalidateCache();
       await this.loadTransactions();
     }
   }

@@ -69,7 +69,7 @@ export class PaymentModalComponent implements OnInit {
     if (user?.uid) {
       const cards = await this.cardService.loadCardsByUser(user.uid);
       this.cards = cards;
-      this.defaultCard = cards.find(c => c.isDefault) || cards[0];
+      this.defaultCard = cards.find((c) => c.isDefault) || cards[0];
     }
   }
 
@@ -83,37 +83,47 @@ export class PaymentModalComponent implements OnInit {
   }
 
   get activeCard(): any {
-    return this.cards.find(c => c.id === this.selectedCardId) || this.defaultCard;
+    return (
+      this.cards.find((c) => c.id === this.selectedCardId) || this.defaultCard
+    );
   }
 
   async pay() {
     if (!this.selectedMerchant || !this.activeCard) return;
-
     this.isProcessing = true;
 
     try {
       const user = this.authService.getCurrentUser();
-      if (!user?.uid) throw new Error('No hay usuario');
+      if (!user?.uid) throw new Error('No hay usuario autenticado');
 
-      await this.paymentService.processPayment({
-        cardId: this.activeCard.id,
-        uid: user.uid,
-        merchant: this.selectedMerchant.name,
-        merchantCategory: this.selectedMerchant.category,
-        amount: this.totalAmount,
-        currency: 'COP',
-        date: new Date(),
-        status: 'approved',
-      });
+      // Guardar transacción en Firestore con timeout de 15s
+      await Promise.race([
+        this.paymentService.processPayment({
+          cardId: this.activeCard.id,
+          uid: user.uid,
+          merchant: this.selectedMerchant.name,
+          merchantCategory: this.selectedMerchant.category,
+          amount: this.totalAmount,
+          currency: 'COP',
+          date: new Date(),
+          status: 'approved',
+        }),
+        new Promise((_, reject) =>
+          setTimeout(
+            () => reject(new Error('Timeout guardando transacción')),
+            15000,
+          ),
+        ),
+      ]);
 
-      await this.notificationService.notifyPaymentSuccess(
-      user.uid,
-      this.selectedMerchant.name,
-      this.totalAmount
-    );
-
-      // Recargar transacciones
-      //await this.paymentService.loadTransactionsByUser(user.uid);
+      // Notificación en segundo plano — nunca bloquea el flujo del pago
+      this.notificationService
+        .notifyPaymentSuccess(
+          user.uid,
+          this.selectedMerchant.name,
+          this.totalAmount,
+        )
+        .catch((err) => console.warn('Notificación no enviada:', err));
 
       const toast = await this.toastCtrl.create({
         message: `✅ Pago de $${this.totalAmount.toLocaleString()} a ${this.selectedMerchant.name} aprobado`,
@@ -122,13 +132,13 @@ export class PaymentModalComponent implements OnInit {
         position: 'top',
       });
       await toast.present();
-
       this.modalCtrl.dismiss({ success: true });
-    } catch (err) {
+    } catch (err: any) {
+      console.error('Error en pago:', err?.message || err);
       await this.notificationService.hapticError();
       const toast = await this.toastCtrl.create({
-        message: '❌ Error procesando el pago',
-        duration: 2000,
+        message: '❌ Error procesando el pago. Intenta de nuevo.',
+        duration: 2500,
         color: 'danger',
         position: 'top',
       });
@@ -148,22 +158,26 @@ export class PaymentModalComponent implements OnInit {
   }
 
   getCardClass(brand: string): string {
-  const b = this.getBrandKey(brand);
-  const map: any = { visa: 'acf-visa', mastercard: 'acf-mc', amex: 'acf-amex' };
-  return map[b] || 'acf-unknown';
-}
+    const b = this.getBrandKey(brand);
+    const map: any = {
+      visa: 'acf-visa',
+      mastercard: 'acf-mc',
+      amex: 'acf-amex',
+    };
+    return map[b] || 'acf-unknown';
+  }
 
-getBrandKey(brand: string): string {
-  const b = (brand || '').toLowerCase();
-  if (b.includes('visa')) return 'visa';
-  if (b.includes('master')) return 'mastercard';
-  if (b.includes('amex') || b.includes('american')) return 'amex';
-  return 'unknown';
-}
+  getBrandKey(brand: string): string {
+    const b = (brand || '').toLowerCase();
+    if (b.includes('visa')) return 'visa';
+    if (b.includes('master')) return 'mastercard';
+    if (b.includes('amex') || b.includes('american')) return 'amex';
+    return 'unknown';
+  }
 
-formatCardNumber(num: string): string {
-  if (!num) return '**** **** **** ****';
-  const clean = num.replace(/\D/g, '');
-  return clean.replace(/(.{4})/g, '$1  ').trim();
-}
+  formatCardNumber(num: string): string {
+    if (!num) return '**** **** **** ****';
+    const clean = num.replace(/\D/g, '');
+    return clean.replace(/(.{4})/g, '$1  ').trim();
+  }
 }

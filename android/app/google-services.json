@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "539926553036-heiik5ug2mp8qap6rnptopoqi43n088f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.camilo.mydigitalwallet",
+            "certificate_hash": "769011357f6a9efd1d32a4c4abbecf98bded4295"
+          }
+        },
+        {
           "client_id": "539926553036-78lha7ur6odhnb5f8c94evnid1bcprgc.apps.googleusercontent.com",
           "client_type": 3
         }

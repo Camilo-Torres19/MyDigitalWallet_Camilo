@@ -1,29 +1,32 @@
 import { Injectable } from '@angular/core';
 import { NativeBiometric } from 'capacitor-native-biometric';
-import { Firestore, doc, updateDoc } from '@angular/fire/firestore'; // ✅ API modular
+import { Firestore, doc, updateDoc } from '@angular/fire/firestore'; // API modular
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BiometricService {
-
-  constructor(private firestore: Firestore) {} // ✅ reemplaza AngularFirestore
+  constructor(private firestore: Firestore) {} // reemplaza AngularFirestore
 
   async isAvailable(): Promise<boolean> {
     const result = await NativeBiometric.isAvailable();
     return result.isAvailable;
   }
 
-  async enrollBiometric(uid: string, username: string, password: string): Promise<void> {
+  async enrollBiometric(
+    uid: string,
+    username: string,
+    password: string,
+  ): Promise<void> {
     await NativeBiometric.setCredentials({
       username,
       password,
-      server: 'myapp.com'
+      server: 'myapp.com',
     });
 
-    // ✅ reemplaza this.afs.collection('users').doc(uid).update()
+    // reemplaza this.afs.collection('users').doc(uid).update()
     await updateDoc(doc(this.firestore, `users/${uid}`), {
-      biometrics: true
+      biometrics: true,
     });
   }
 
@@ -31,13 +34,18 @@ export class BiometricService {
     await NativeBiometric.deleteCredentials({ server: 'myapp.com' });
 
     await updateDoc(doc(this.firestore, `users/${uid}`), {
-      biometrics: false
+      biometrics: false,
     });
   }
 
-  async getCredentials(): Promise<{ username: string; password: string } | null> {
+  async getCredentials(): Promise<{
+    username: string;
+    password: string;
+  } | null> {
     try {
-      const creds = await NativeBiometric.getCredentials({ server: 'myapp.com' });
+      const creds = await NativeBiometric.getCredentials({
+        server: 'myapp.com',
+      });
       return creds;
     } catch {
       return null;
@@ -48,7 +56,7 @@ export class BiometricService {
     try {
       const result: any = await NativeBiometric.verifyIdentity({
         reason: 'Acceso seguro al perfil',
-        title: 'Autenticación biométrica'
+        title: 'Autenticación biométrica',
       });
 
       if (result && typeof result === 'object' && 'verified' in result) {
